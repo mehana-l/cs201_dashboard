@@ -1,0 +1,44 @@
+---
+title: "Flexdashboard"
+author: "Mehana"
+date: "11/18/24"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source_code: embed
+    theme:
+      bootswatch: yeti
+      navbar: 
+        - { title: "Mehana", href: "https://m-leafchild.github.io", align: right }
+        - { text: "GitHub", icon: "fa-github", href: "https://m-leafchild.gith", align: right }
+  ---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+
+```
+
+### Chart C
+
+```{r}
+
+```
+
