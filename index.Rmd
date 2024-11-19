@@ -9,75 +9,41 @@ output:
     source_code: embed
     theme:
       bootswatch: yeti
-      navbar: 
-        - { title: "Mehana", href: "https://mehana-l.github.io", align: right }
-        - { text: "fa fa-GitHub", icon: "fa-github", href: "https://mehana-l.github.com", align: right, target:
-        blank }
+      
 ---
-
 ```{r setup, include=FALSE}
 library(flexdashboard)
 library(tidyverse)
 library(plotly)
-library(knitr)
 ```
 
-# Page 1
-## Row 
+Column {data-width=350}
+-----------------------------------------------------------------------
 
-### Summary
-
-This is just some text to see what it looks like to have a text block. What information should I put here?
-
-Here is a second line of text.
-
-## Row
-
-### Chart A
-
-TEST
+### Star Wars character heights by name
 
 ```{r}
-ggplot(diamonds, aes(x = carat, y = price)) +
-  geom_point(alpha=0.1, size=1)
+ggplot(starwars, aes(x=name, y=height)) +
+  geom_bar(stat="identity") +
+  coord_flip()
 ```
 
-### Chart B
+### Count of Star Wars characters' homeworld by gender
 
 ```{r}
-diamonds %>%
-  mutate(color = fct_rev(color)) %>% 
-  ggplot(aes(x = color, y = price, color = color)) +
-  geom_boxplot()
+p <- ggplot(starwars, aes(x=homeworld, fill=gender)) +
+  geom_bar()
+
+ggplotly(p)
 ```
 
-## Row {.tabset .tabset-fade data-height="400"}
-
-### Chart C
+Column {data-width=650}
+-----------------------------------------------------------------------
+### Star Wars data table
 
 ```{r}
-starwars_data <- starwars %>%
-  
+starwars <- starwars %>% 
+  select(name, height, mass, gender, species, homeworld)
+
 knitr::kable(starwars)
-```
-
-### Chart D
-
-This is some test text
-
-```{r}
-test <- ggplot(diamonds, aes(x = price, y = after_stat(density))) + 
-  geom_freqpoly(aes(color = cut), binwidth = 500, linewidth = 0.75)
-
-ggplotly(test)
-```
-
-# Page 2
-
-## Row
-
-### Chart E
-
-```{r}
-knitr::kable(mpg)
 ```
