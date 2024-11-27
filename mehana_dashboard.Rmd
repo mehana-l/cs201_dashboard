@@ -1,0 +1,155 @@
+---
+title: "Flexdashboard"
+author: "Mehana Leafchild"
+date: "11/18/24"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source_code: embed
+    theme:
+      bootswatch: yeti
+      
+---
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(plotly)
+library(ggthemes)
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+
+```{r}
+np_species <- read_csv("most_visited_nps_species_data_copy.csv") #reading in the data
+```
+
+
+```{r}
+specific_parks <- np_species %>%
+  filter(ParkName %in% c("Yellowstone National Park",
+                         "Grand Canyon National Park",
+                         "Joshua Tree National Park"))
+```
+```{r}
+specific_parks <- np_species %>%
+  filter(ParkName %in% c("Yellowstone National Park",
+                         "Grand Canyon National Park",
+                         "Joshua Tree National Park")) #selecing only these specific parks 
+
+filtered_category_data <- specific_parks %>%
+  group_by(CategoryName) %>%           # Group by the column of interest
+  filter(n() >= 1)      #keep everything over 1
+
+category_counts <- specific_parks %>%
+  count(CategoryName, sort = TRUE)      #selecting only categorynames and quantifying
+
+```
+
+In my dashboard I am selecting specific parks to see the variation between the the types of organisms sighted. 
+
+Yellowstone
+
+```{r}
+yellowstone_category <- specific_parks %>%
+  filter(ParkName == ("Yellowstone National Park")) #selecing only yellowstone park
+
+filtered_yellowstone_category_data <- yellowstone_category %>%
+  group_by(CategoryName) %>%           # Group by the column of interest
+  filter(n() >= 1)      #keep everything over 1 keep it consistent
+
+yellowstone_category_counts <- yellowstone_category %>%
+  count(CategoryName, sort = TRUE)
+```
+
+Joshua Tree
+
+```{r}
+joshua_tree_category <- specific_parks %>%
+  filter(ParkName == ("Joshua Tree National Park")) #selecing only yellowstone park
+
+filtered_joshua_tree_category_data <- joshua_tree_category %>%
+  group_by(CategoryName) %>%           # Group by the column of interest
+  filter(n() >= 1)      #keep everything over 1 keep it consistent
+
+joshua_tree_category_counts <- joshua_tree_category %>%
+  count(CategoryName, sort = TRUE)
+```
+
+Grand Canyon
+
+```{r}
+grandcanyon_category <- specific_parks %>%
+  filter(ParkName == ("Grand Canyon National Park")) #selecing only yellowstone park
+
+filtered_grandcanyon_category_data <- grandcanyon_category %>%
+  group_by(CategoryName) %>%           # Group by the column of interest
+  filter(n() >= 1)      #keep everything over 1 keep it consistent
+
+grandcanyon_category_counts <- grandcanyon_category %>%
+  count(CategoryName, sort = TRUE)
+```
+
+
+The first plot is looking at category observations in all three parks combined.
+
+```{r}
+all_parks <- ggplot(category_counts, aes(x = CategoryName, y = n)) +
+geom_col() +
+coord_flip() + 
+  theme_economist_white()
+  labs(title = "Number of Species Spotted",
+       subtitle = "Within Yellowstone, Joshua Tree, and Grand Canyon",
+       x = "Number of Observations",
+       y = "Category")
+
+  ggplotly(all_parks)
+```
+
+Looking at category observations just in Yellowstone
+
+```{r}
+ggplot(yellowstone_category_counts, aes(x = CategoryName, y = n)) +
+geom_col() +
+coord_flip() + 
+  theme_economist() +
+  labs(title = "Number of Species Spotted",
+       subtitle = "Within Yellowstone",
+       x = "Category",
+       y = "Percent Number of Observations") +
+  scale_y_continuous(labels = scales::percent)
+```
+
+Looking at category observations just in Joshua Tree
+
+```{r}
+ggplot(joshua_tree_category_counts, aes(x = CategoryName, y = n)) +
+geom_col() +
+coord_flip() + 
+  theme_economist() +
+  labs(title = "Number of Species Spotted",
+       subtitle = "Within Joshua Tree",
+       x = "Number of Observations",
+       y = "Category")
+```
+
+Looking at category observations just in Grand Canyon
+
+```{r}
+grand_canyon <- ggplot(grandcanyon_category_counts, aes(x = CategoryName, y = n)) +
+geom_col() +
+coord_flip() + 
+  theme_economist() +
+  labs(title = "Number of Species Spotted",
+       subtitle = "Grand Canyon",
+       x = "Number of Observations",
+       y = "Category")
+```
+
+```{r}
+
+grand_canyon + coord_polar()
+
+```
