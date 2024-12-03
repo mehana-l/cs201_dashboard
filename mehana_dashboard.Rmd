@@ -9,8 +9,11 @@ output:
     source_code: embed
     theme:
       bootswatch: yeti
-      
+    navbar:
+      - {title: "Mehana's Website", href: "https://mehana-l.github.io/"}
+      - {title: "Mehana's GitHub", href: "https://github.com/mehana-l/mehana-l.github.io"}
 ---
+
 ```{r setup, include=FALSE}
 library(flexdashboard)
 library(tidyverse)
@@ -22,9 +25,7 @@ library(ggthemes)
 np_species <- read_csv("most_visited_nps_species_data_copy.csv") #reading in the data
 ```
 
-Species Found in National Parks
-
-=======================================================================
+Species Found in National Parks Data Set
 
 
 ```{r}
@@ -51,7 +52,7 @@ category_counts <- specific_parks %>%
 
 ```
 
-In my dashboard I am using some National park data collected from ___. By selecting specific parks I was able to see the variation between the the types of organisms sighted at each park. The parks I selected are Yellowstone, Joshua Tree, and Grand Canyon. 
+In my dashboard I am using some National park data collected from Umer Haddii who posted the data set on Kaggle. By selecting specific parks I was able to see the variation between the the types of organisms sighted at each park. The parks I selected are Yellowstone, Joshua Tree, and Grand Canyon.Can you see which park has the most species sightings? 
 
 
 ```{r}
@@ -106,7 +107,14 @@ Column {data-width=650}
 all_parks <- ggplot(category_counts, aes(x = CategoryName, y = n)) +
 geom_col() +
 coord_flip() + 
-  theme_economist_white()
+  theme_economist_white() +
+  theme(
+    axis.text.y = element_text(angle = 45, hjust = 1) # Rotate y-axis labels
+  ) +
+labs(title = "Number of Species Spotted",
+       subtitle = "All Three Parks",
+       x = "Category",
+       y = "Number of Observations")
   
 ```
 
@@ -128,8 +136,7 @@ coord_flip() +
   labs(title = "Number of Species Spotted",
        subtitle = "Within Yellowstone",
        x = "Category",
-       y = "Number of Observations") +
-  scale_y_continuous(labels = scales::percent)
+       y = "Number of Observations") 
 ```
 
 
