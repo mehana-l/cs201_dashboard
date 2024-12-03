@@ -18,21 +18,24 @@ library(plotly)
 library(ggthemes)
 ```
 
-Column {data-width=350}
------------------------------------------------------------------------
-
-
 ```{r}
 np_species <- read_csv("most_visited_nps_species_data_copy.csv") #reading in the data
 ```
 
+Species Found in National Parks
+
+=======================================================================
+
 
 ```{r}
+#
 specific_parks <- np_species %>%
   filter(ParkName %in% c("Yellowstone National Park",
                          "Grand Canyon National Park",
                          "Joshua Tree National Park"))
 ```
+
+
 ```{r}
 specific_parks <- np_species %>%
   filter(ParkName %in% c("Yellowstone National Park",
@@ -48,11 +51,11 @@ category_counts <- specific_parks %>%
 
 ```
 
-In my dashboard I am selecting specific parks to see the variation between the the types of organisms sighted. 
+In my dashboard I am using some National park data collected from ___. By selecting specific parks I was able to see the variation between the the types of organisms sighted at each park. The parks I selected are Yellowstone, Joshua Tree, and Grand Canyon. 
 
-Yellowstone
 
 ```{r}
+#Yellowstone
 yellowstone_category <- specific_parks %>%
   filter(ParkName == ("Yellowstone National Park")) #selecing only yellowstone park
 
@@ -64,9 +67,9 @@ yellowstone_category_counts <- yellowstone_category %>%
   count(CategoryName, sort = TRUE)
 ```
 
-Joshua Tree
 
 ```{r}
+#Joshua Tree
 joshua_tree_category <- specific_parks %>%
   filter(ParkName == ("Joshua Tree National Park")) #selecing only yellowstone park
 
@@ -78,9 +81,10 @@ joshua_tree_category_counts <- joshua_tree_category %>%
   count(CategoryName, sort = TRUE)
 ```
 
-Grand Canyon
+
 
 ```{r}
+#Grand Canyon
 grandcanyon_category <- specific_parks %>%
   filter(ParkName == ("Grand Canyon National Park")) #selecing only yellowstone park
 
@@ -93,22 +97,28 @@ grandcanyon_category_counts <- grandcanyon_category %>%
 ```
 
 
-The first plot is looking at category observations in all three parks combined.
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### All Three Parks Combined
 
 ```{r}
 all_parks <- ggplot(category_counts, aes(x = CategoryName, y = n)) +
 geom_col() +
 coord_flip() + 
   theme_economist_white()
-  labs(title = "Number of Species Spotted",
-       subtitle = "Within Yellowstone, Joshua Tree, and Grand Canyon",
-       x = "Number of Observations",
-       y = "Category")
-
-  ggplotly(all_parks)
+  
 ```
 
-Looking at category observations just in Yellowstone
+```{r}
+ ggplotly(all_parks)
+```
+
+
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
 
 ```{r}
 ggplot(yellowstone_category_counts, aes(x = CategoryName, y = n)) +
@@ -118,11 +128,11 @@ coord_flip() +
   labs(title = "Number of Species Spotted",
        subtitle = "Within Yellowstone",
        x = "Category",
-       y = "Percent Number of Observations") +
+       y = "Number of Observations") +
   scale_y_continuous(labels = scales::percent)
 ```
 
-Looking at category observations just in Joshua Tree
+
 
 ```{r}
 ggplot(joshua_tree_category_counts, aes(x = CategoryName, y = n)) +
@@ -131,11 +141,10 @@ coord_flip() +
   theme_economist() +
   labs(title = "Number of Species Spotted",
        subtitle = "Within Joshua Tree",
-       x = "Number of Observations",
-       y = "Category")
+       y = "Number of Observations",
+       x = "Category")
 ```
 
-Looking at category observations just in Grand Canyon
 
 ```{r}
 grand_canyon <- ggplot(grandcanyon_category_counts, aes(x = CategoryName, y = n)) +
